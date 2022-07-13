@@ -1,15 +1,12 @@
-<%@page import="java.sql.ResultSet"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.time.LocalDate" %>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.ResultSet"%>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.ResultSet" %>
+
 <%@ page import="DBPKG.DBConnection" %>
 
-<%
-LocalDate today = LocalDate.now();
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -56,10 +53,11 @@ LocalDate today = LocalDate.now();
 		}
 		catch(Exception excp)
 		{
+			System.out.println(excp.getMessage());
 			excp.printStackTrace();
 		}
 		
-		// 2. DB를 Query를 전송한다.
+		// 2. DB를 Query에 전송한다.
 		
 		// 3. 결과값을 가져온다.
 		%>
@@ -81,7 +79,7 @@ LocalDate today = LocalDate.now();
 			</tr>
 			<tr>
 				<td>가입일자</td>
-				<td><input type="text" id="id_joindate" name="joindate" value=<%= today %> readonly></td>
+				<td><input type="text" id="id_joindate" name="joindate"></td>
 			</tr>
 			<tr>
 				<td>고객등급(A:VIP,B:일반,C:직원)</td>
@@ -97,14 +95,19 @@ LocalDate today = LocalDate.now();
 	<button id="id_inqMember">조회</button>
 	
 	<%@ include file="footer.jsp" %>
+
+	<iframe name="hiddenframe" width="100px" height="100px" style="display:none"></iframe>
 	
-	<!-- <iframe name="hiddenframe" width="100px" height="100px" style="display:none"></iframe> -->
-	<iframe name="hiddenframe" width="500px" height="500px"></iframe>
+	<!-- 내부의 상황이 보이는 프레임 : 디버깅용 -->
+	<!-- <iframe name="hiddenframe" width="500px" height="500px"></iframe> -->
 	
 	<script>
 	(function()
 	{
 		const frmReg = document.getElementById("id_regForm");
+		const btn_regMember = document.getElementById("id_regMember");
+		const btn_inqMember = document.getElementById("id_inqMember");
+		(document.querySelector("#id_custname")).focus();
 		
 		const checkDataSize = function()
 		{
@@ -129,9 +132,6 @@ LocalDate today = LocalDate.now();
 			}
 			return true;
 		}
-		
-		const btn_regMember = document.getElementById("id_regMember");
-		const btn_inqMember = document.getElementById("id_inqMember");
 		
 		btn_regMember.addEventListener('click', () =>
 		{
